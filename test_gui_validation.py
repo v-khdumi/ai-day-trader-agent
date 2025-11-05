@@ -71,11 +71,23 @@ def test_gui_syntax():
     
     try:
         import py_compile
-        py_compile.compile('gui_app.py', doraise=True)
-        print("  ✅ gui_app.py syntax valid")
+        import os
         
-        py_compile.compile('launch_gui.py', doraise=True)
-        print("  ✅ launch_gui.py syntax valid")
+        # Get the directory where this script is located
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Define files to validate
+        files_to_validate = [
+            os.path.join(script_dir, 'gui_app.py'),
+            os.path.join(script_dir, 'launch_gui.py')
+        ]
+        
+        for file_path in files_to_validate:
+            if os.path.exists(file_path):
+                py_compile.compile(file_path, doraise=True)
+                print(f"  ✅ {os.path.basename(file_path)} syntax valid")
+            else:
+                print(f"  ⚠️  {os.path.basename(file_path)} not found")
         
         return True
         

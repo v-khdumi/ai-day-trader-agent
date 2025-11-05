@@ -21,7 +21,15 @@ def install_dependencies():
     """Install required dependencies."""
     print("📦 Installing required dependencies...")
     print("This may take a few minutes...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
+    
+    # Find requirements.txt in the script's directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    requirements_path = os.path.join(script_dir, "requirements.txt")
+    
+    if not os.path.exists(requirements_path):
+        raise FileNotFoundError(f"requirements.txt not found at {requirements_path}")
+    
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", requirements_path])
     print("✅ Dependencies installed successfully!")
 
 def main():
@@ -57,10 +65,19 @@ def main():
     print("The web interface will open at: http://localhost:8501")
     print("\n⚠️  To stop the server, press Ctrl+C in this window\n")
     
+    # Get the path to gui_app.py
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    gui_app_path = os.path.join(script_dir, "gui_app.py")
+    
+    if not os.path.exists(gui_app_path):
+        print(f"❌ Error: gui_app.py not found at {gui_app_path}")
+        input("\nPress Enter to exit...")
+        sys.exit(1)
+    
     try:
         subprocess.run([
             sys.executable, "-m", "streamlit", "run",
-            "gui_app.py",
+            gui_app_path,
             "--server.port", "8501",
             "--server.address", "localhost"
         ])

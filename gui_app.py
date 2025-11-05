@@ -270,10 +270,15 @@ def show_stock_analysis():
                 
                 with col2:
                     confidence = result.get('confidence', '0%')
-                    if isinstance(confidence, str):
-                        conf_display = confidence
-                    else:
-                        conf_display = f"{confidence:.1%}"
+                    try:
+                        if isinstance(confidence, str):
+                            conf_display = confidence
+                        elif isinstance(confidence, (int, float)):
+                            conf_display = f"{confidence:.1%}"
+                        else:
+                            conf_display = "N/A"
+                    except (ValueError, TypeError):
+                        conf_display = "N/A"
                     st.metric("Confidence", conf_display)
                 
                 with col3:
@@ -369,6 +374,19 @@ def show_stock_analysis():
                                 current_price = technical.get('current_price', 0)
                                 
                                 if current_price > 0:
+                                    # Parse confidence value safely
+                                    confidence_value = result.get('confidence', 0)
+                                    try:
+                                        if isinstance(confidence_value, str):
+                                            # Remove % and convert to float
+                                            confidence_float = float(confidence_value.rstrip('%')) / 100
+                                        elif isinstance(confidence_value, (int, float)):
+                                            confidence_float = float(confidence_value)
+                                        else:
+                                            confidence_float = 0.0
+                                    except (ValueError, AttributeError):
+                                        confidence_float = 0.0
+                                    
                                     trade_id = pm.record_trade(
                                         name=st.session_state.selected_portfolio,
                                         symbol=ticker,
@@ -376,9 +394,7 @@ def show_stock_analysis():
                                         quantity=quantity,
                                         price=current_price,
                                         strategy=result.get('primary_strategy', 'multi'),
-                                        confidence=float(result.get('confidence', '0%').rstrip('%')) / 100 
-                                                 if isinstance(result.get('confidence'), str) 
-                                                 else result.get('confidence', 0),
+                                        confidence=confidence_float,
                                         notes=f"GUI execution: {result.get('primary_reason', '')}"
                                     )
                                     st.success(f"✅ Trade executed! Trade ID: {trade_id}")
@@ -585,6 +601,13 @@ def show_trade_history():
     # Convert to DataFrame
     trade_data = []
     for trade in trades:
+        # Safely format confidence
+        confidence_value = trade.get('confidence')
+        if confidence_value and isinstance(confidence_value, (int, float)):
+            conf_display = f"{confidence_value*100:.0f}%"
+        else:
+            conf_display = 'N/A'
+        
         trade_data.append({
             'Date': trade['timestamp'][:19],
             'Symbol': trade['symbol'],
@@ -593,7 +616,7 @@ def show_trade_history():
             'Price': format_currency(trade['price']),
             'Total Value': format_currency(trade['total_value']),
             'Strategy': trade['strategy'] or 'Manual',
-            'Confidence': f"{trade['confidence']*100:.0f}%" if trade['confidence'] else 'N/A'
+            'Confidence': conf_display
         })
     
     df = pd.DataFrame(trade_data)
