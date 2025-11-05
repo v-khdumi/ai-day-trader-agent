@@ -41,8 +41,10 @@ if 'api_keys' not in st.session_state:
     try:
         st.session_state.api_keys = load_env_variables()
     except Exception as e:
-        st.error(f"Error loading API keys: {e}")
+        logger.warning(f"Could not load all API keys: {e}")
+        # Initialize with empty dict to allow GUI to start
         st.session_state.api_keys = {}
+        st.session_state.api_keys_error = str(e)
 
 
 def show_sidebar():
@@ -692,6 +694,15 @@ def show_settings():
 
 def main():
     """Main application entry point."""
+    # Check for API key issues and show warning
+    if hasattr(st.session_state, 'api_keys_error'):
+        st.warning(
+            "⚠️ Some API keys are not configured. "
+            "Stock analysis features may be limited. "
+            "Please set up your `.env` file with required API keys. "
+            "See Settings for more details."
+        )
+    
     # Display sidebar and get selected page
     page = show_sidebar()
     

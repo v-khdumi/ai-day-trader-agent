@@ -2,6 +2,8 @@
 
 A sophisticated, multi-strategy AI-powered trading agent that combines technical analysis, sentiment analysis, and dividend capture strategies to generate intelligent trade recommendations. Features enhanced signal fusion, comprehensive risk management, and professional-grade architecture.
 
+**🚀 New: Web-based GUI for easy portfolio management!** See [QUICKSTART.md](QUICKSTART.md) to get started in 3 steps.
+
 ---
 
 ## Features
