@@ -150,3 +150,6 @@ $RECYCLE.BIN/
 
 # VSCode
 .vscode/
+
+# Streamlit cache
+.streamlit/secrets.toml
