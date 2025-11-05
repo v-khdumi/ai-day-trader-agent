@@ -19,6 +19,7 @@ A sophisticated, multi-strategy AI-powered trading agent that combines technical
 - Real-time price tracking with moving average comparisons
 
 ### 🤖 **AI-Powered Intelligence**
+- **Web-based GUI**: Modern, intuitive Streamlit interface for portfolio management
 - Discord bot interface for real-time trade analysis
 - Enhanced analysis output with detailed technical indicators
 - Comprehensive risk management with stop-loss and take-profit calculations
@@ -104,6 +105,39 @@ The system uses **portfolio-based position sizing** that adapts to your actual t
 ---
 
 ## Usage
+
+### 🖥️ **Graphical User Interface (Recommended)**
+
+The easiest way to use the AI Day Trader Agent is through the web-based GUI:
+
+#### Start the GUI
+
+**Linux/Mac:**
+```bash
+./start_gui.sh
+```
+
+**Windows:**
+```cmd
+start_gui.bat
+```
+
+**Or manually:**
+```bash
+streamlit run gui_app.py
+```
+
+The GUI will open in your browser at `http://localhost:8501`
+
+#### GUI Features
+
+- **📊 Dashboard**: Real-time portfolio overview with performance metrics and charts
+- **🔍 Stock Analysis**: Interactive stock analysis with AI-powered recommendations
+- **💼 Portfolio Management**: Easy portfolio creation and holdings management
+- **📈 Trade History**: Visual trade history with performance analytics
+- **⚙️ Settings**: Configuration and API key status
+
+### 📱 **Command Line Interface**
 
 ### Portfolio Management
 
